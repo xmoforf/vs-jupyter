@@ -1,0 +1,13 @@
+diff --git a/PKGBUILD b/PKGBUILD
+index 0b67053..c33d1d4 100644
+--- a/PKGBUILD
++++ b/PKGBUILD
+@@ -10,7 +10,7 @@ url='http://avisynth.nl/index.php/QTGMC'
+ depends=(
+ 	'python-scipy'
+ 	'vapoursynth-plugin-havsfunc-git'
+-	'vapoursynth-miscfilters-obsolete-git'
++	'vapoursynth-plugin-misc-git'
+ 	'vapoursynth-plugin-mvtools-git'
+ 	'vapoursynth-plugin-fft3dfilter-git'
+ 	'vapoursynth-plugin-znedi3-git'

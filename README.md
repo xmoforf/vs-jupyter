@@ -1,12 +1,43 @@
-# vapoursynth-docker
-Simple docker containers for using [vapoursynth](https://www.vapoursynth.com/) in conjunction with encoders like ffmpeg, x264 and x265.
-This container gives you a collection of preselected vapoursynth plugins as well as the ability to write and execute scripts and encodes in [yuuno](https://yuuno.encode.moe/).
+# vs-jupyter
+Simple docker containers for using [vapoursynth](https://www.vapoursynth.com/) and modern encoding tools.
 
-## Usage
-Run ``build.sh`` to build containers. This will take a while.
+This container gives you a collection of preselected vapoursynth plugins as well as a Jupyter Lab environment.
 
-You can then access the yuuno container by using the ``vapoursynth-yuuno`` tag.
+Based on archlinux and uses AUR. Works around some bugs so the plugins will build.
 
-To access vapoursynth without yuuno, use the tag ``vapoursynth-utility``.
+## description
 
-To only access vapoursynth without any encoders, use the tag ``vapoursynth-base``.
+Tools included are:
+- basic build environment
+- ffmpeg
+- mediainfo
+- mkvtoolnix
+- flac
+- opus
+- x264 / x265
+- python / jupyter
+- matplotlib
+- scipy / numpy / pandas
+- deew (requires DEE)
+
+### docker compose
+
+```yaml
+services:
+  vs-jupyter:
+    container_name: vs-jupyter
+    build:
+      context: ./vapoursynth/vapoursynth-jupyter
+      dockerfile: ./Dockerfile
+    environment:
+      - JUPYTER_TOKEN=""
+    user: "1000:1000"
+    volumes:
+      - <YOUR_PROJECT_DIR_HERE>:/home/user/projects
+      - ./vapoursynth/config:/home/user/.jupyter
+    restart: unless-stopped
+```
+
+# credit
+
+Derived from work done here: https://github.com/Midtan/vapoursynth-docker

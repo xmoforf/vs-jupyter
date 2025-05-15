@@ -1,0 +1,10 @@
+--- src/znedi3/graphengine/graphengine/graph.cpp  2025-05-15 18:54:13.198591341 +0000
++++ src/znedi3/graphengine/graphengine/graph.cpp	2025-05-15 18:55:33.819509126 +0000
+@@ -11,6 +11,7 @@
+ #include <type_traits>
+ #include <utility>
+ #include <vector>
++#include <cstdint>
+ #include "graphengine/filter.h"
+ #include "graphengine/graph.h"
+ #include "cpuinfo.h"

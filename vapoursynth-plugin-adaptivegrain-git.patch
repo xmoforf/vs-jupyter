@@ -1,0 +1,13 @@
+diff --git a/PKGBUILD b/PKGBUILD
+index ddf2695..2f4d2e7 100644
+--- a/PKGBUILD
++++ b/PKGBUILD
+@@ -25,7 +25,7 @@ build() {
+     echo 'If the build fails with “no default toolchain configured”, you may need to set up rust.
+ When using rustup, this can be done via
+ rustup install stable && rustup default stable'
+-    RUSTFLAGS="$RUSTFLAGS -C target-cpu=native" cargo build --release --locked
++    RUSTFLAGS="$RUSTFLAGS -C target-cpu=native" cargo build --release
+ }
+
+ package() {
