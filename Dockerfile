@@ -31,9 +31,13 @@ RUN sudo pacman -Syu --noconfirm --noprogressbar \
     python-{pip,distutils-extra,uv} ruff \
     ffmpeg \
     flac \
+    go \
     mediainfo \
     mkvtoolnix-cli \
     opus opus-tools \
+    lame \
+    rust \
+    sox \
     x264 x265 \
     qt6-multimedia
 
@@ -111,6 +115,16 @@ RUN python -m venv venv && \
 
 RUN venv/bin/python -m pip install \
     vsengine vsjetpack vspreview vsutil
+
+RUN git clone https://gitlab.com/passelecasque/propolis.git && \
+    cd propolis && \
+    make build && sudo install -D propolis /usr/local/bin/propolis && \
+    cd ..
+
+RUN git clone https://github.com/casey/intermodal.git && \
+    cd intermodal && \
+    sudo cargo install --path . && \
+    cd ..
 
 RUN venv/bin/python -m pip install \
     av \
