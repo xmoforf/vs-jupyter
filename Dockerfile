@@ -109,7 +109,16 @@ RUN python -m venv venv && \
     venv/bin/python -m pip install ipykernel && \
     venv/bin/python -m ipykernel install --user --name=vapoursynth --display-name="Vapoursynth"
 
-RUN venv/bin/python -m pip install av numpy scipy pandas matplotlib scikit-image vsengine vsjetpack vspreview vsutil requests jinja2 deew
+RUN venv/bin/python -m pip install \
+    vsengine vsjetpack vspreview vsutil
+
+RUN venv/bin/python -m pip install \
+    av \
+    numpy scipy pandas matplotlib scikit-image \
+    requests \
+    jinja2 \
+    deew \
+    guessit
 
 
 USER user
