@@ -126,6 +126,8 @@ RUN git clone https://github.com/casey/intermodal.git && \
     sudo cargo install --path . && \
     cd ..
 
+RUN yay -Syu --noconfirm --noprogressbar --removemake mkbrr
+
 RUN venv/bin/python -m pip install \
     av \
     numpy scipy pandas matplotlib scikit-image \
