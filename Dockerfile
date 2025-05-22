@@ -5,30 +5,34 @@ RUN pacman-key --init
 RUN pacman -Sy --noconfirm --noprogressbar archlinux-keyring && pacman -Su --noconfirm --noprogressbar
 
 # Add user, group sudo
-RUN pacman -Syu --noconfirm --noprogressbar base-devel && \
-    groupadd --system sudo && useradd -m --groups sudo user && \
+RUN pacman -Syu --noconfirm --noprogressbar base-devel git && \
+    echo $DOCKER_GID && \
+    groupadd --system sudo && \
+    useradd -m --groups sudo user && \
     sed -i -e "s/Defaults    requiretty.*/ #Defaults    requiretty/g" /etc/sudoers && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-# Installing AUR manager
-RUN sudo pacman -Syu --noconfirm --noprogressbar git
 USER user
 WORKDIR /tmp
+
+# Installing AUR manager
 RUN git clone https://aur.archlinux.org/yay.git && \
     cd yay && \
     makepkg --noconfirm --noprogressbar -si && \
     yay --afterclean --removemake --save
 
-# Installing vapoursynth
-RUN yay -Syu --noconfirm --noprogressbar --removemake vapoursynth-git
+# Installing vapoursynth and plugins
+RUN yay -Syu --noconfirm --noprogressbar \
+    vapoursynth-git
 
-# Installing plugins
+# Installing packages
 RUN sudo pacman -Syu --noconfirm --noprogressbar \
-    base-devel cmake git ninja \
+    cmake ninja \
     less \
     nano nvim vim \
     boost-libs \
     python-{pip,distutils-extra,uv} ruff \
+    python-ipykernel jupyterlab \
     ffmpeg \
     flac \
     go \
@@ -39,9 +43,25 @@ RUN sudo pacman -Syu --noconfirm --noprogressbar \
     rust \
     sox \
     x264 x265 \
-    qt6-multimedia
+    qt6-multimedia \
+    docker
 
-RUN yay -Syu --noconfirm --noprogressbar \
+RUN sudo usermod -aG docker user
+
+RUN yay -Syu --noconfirm --noprogressbar --removemake mkbrr
+
+RUN git clone https://gitlab.com/passelecasque/propolis.git && \
+    cd propolis && \
+    make build && sudo install -D propolis /usr/local/bin/propolis && \
+    cd ..
+
+RUN git clone https://github.com/casey/intermodal.git && \
+    cd intermodal && \
+    sudo cargo install --path . && \
+    cd ..
+
+
+RUN yay -Syu --noconfirm --noprogressbar --removemake \
     vapoursynth-plugin-addgrain-git \
     vapoursynth-plugin-bm3d-git \
     vapoursynth-plugin-combmask-git \
@@ -59,6 +79,7 @@ RUN yay -Syu --noconfirm --noprogressbar \
     vapoursynth-plugin-havsfunc-git \
     vapoursynth-plugin-knlmeanscl-git \
     vapoursynth-plugin-lsmashsource-git \
+    vapoursynth-plugin-lvsfunc-git \
     vapoursynth-plugin-muvsfunc-git \
     vapoursynth-plugin-mvsfunc-git \
     vapoursynth-plugin-mvtools-git \
@@ -66,8 +87,6 @@ RUN yay -Syu --noconfirm --noprogressbar \
     vapoursynth-plugin-sangnom-git \
     vapoursynth-plugin-retinex-git \
     vapoursynth-plugin-vsutil-git
-RUN yay -Syu --noconfirm --noprogressbar \
-    vapoursynth-plugin-lvsfunc-git
 
 COPY vapoursynth-plugin-adaptivegrain-git.patch .
 RUN yay -G vapoursynth-plugin-adaptivegrain-git && \
@@ -93,8 +112,6 @@ RUN yay -Syu --noconfirm --noprogressbar \
 COPY vapoursynth-plugin-resize2-git.patch .
 RUN yay -G vapoursynth-plugin-resize2-git && \
     cd vapoursynth-plugin-resize2-git && \
-    makepkg -so --noconfirm && \
-    patch -p0 < ../vapoursynth-plugin-resize2-git.patch && \
     makepkg -si --noconfirm && \
     cd ..
 
@@ -105,38 +122,21 @@ RUN yay -G qtgmc && \
     makepkg -si --noconfirm && \
     cd ..
 
-RUN sudo pacman -S --noconfirm --noprogressbar python-ipykernel jupyterlab
-#RUN sudo pip3 install yuuno --pre
-
+# python packages
 RUN python -m venv venv && \
-    venv/bin/python -m pip install -U wheel setuptools pip && \
-    venv/bin/python -m pip install ipykernel && \
+    venv/bin/python -m pip install -U wheel setuptools pip ipykernel && \
     venv/bin/python -m ipykernel install --user --name=vapoursynth --display-name="Vapoursynth"
 
 RUN venv/bin/python -m pip install \
-    vsengine vsjetpack vspreview vsutil
-
-RUN git clone https://gitlab.com/passelecasque/propolis.git && \
-    cd propolis && \
-    make build && sudo install -D propolis /usr/local/bin/propolis && \
-    cd ..
-
-RUN git clone https://github.com/casey/intermodal.git && \
-    cd intermodal && \
-    sudo cargo install --path . && \
-    cd ..
-
-RUN yay -Syu --noconfirm --noprogressbar --removemake mkbrr
-
-RUN venv/bin/python -m pip install \
+    vsengine vsjetpack vspreview vsutil \
     av \
     numpy scipy pandas matplotlib scikit-image \
     requests \
     jinja2 \
     deew \
-    guessit
+    guessit \
+    seaborn matplotlib plotly bokeh altair ggplot \
+    jupyter-repo2docker
 
-
-USER user
 WORKDIR /home/user
 ENTRYPOINT [ "jupyter", "lab", "--LabApp.token=''", "--allow-root", "--ip=0.0.0.0", "--port=8889"]
