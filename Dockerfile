@@ -135,6 +135,8 @@ RUN yay -G qtgmc && \
     cd .. && rm -rf qtgmc && \
     sudo rm -rf /tmp/* /var/tmp/* /home/user/.cache/yay/* && sudo pacman -Scc --noconfirm
 
+WORKDIR /home/user
+
 # python packages
 RUN python -m venv venv && \
     venv/bin/python -m pip install -U wheel setuptools pip ipykernel && \
@@ -149,7 +151,6 @@ RUN venv/bin/python -m pip install \
     deew \
     guessit \
     seaborn matplotlib plotly bokeh altair ggplot \
-    jupyter-repo2docker
+    jupyterlab jupyter-repo2docker jupyter-server-terminals jupyterlab-lsp jupyterlab-widgets
 
-WORKDIR /home/user
-ENTRYPOINT [ "jupyter", "lab", "--LabApp.token=''", "--allow-root", "--ip=0.0.0.0", "--port=8889"]
+ENTRYPOINT [ "venv/bin/jupyter", "lab", "--LabApp.token=''", "--allow-root", "--ip=0.0.0.0", "--port=8889"]
