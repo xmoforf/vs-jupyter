@@ -143,6 +143,7 @@ RUN python -m venv venv && \
     venv/bin/python -m ipykernel install --user --name=vapoursynth --display-name="Vapoursynth"
 
 RUN venv/bin/python -m pip install \
+    git+https://github.com/vapoursynth/vapoursynth.git \
     vsengine vsjetpack vspreview vsutil \
     av \
     numpy scipy pandas matplotlib scikit-image \
@@ -152,5 +153,10 @@ RUN venv/bin/python -m pip install \
     guessit \
     seaborn matplotlib plotly bokeh altair ggplot \
     jupyterlab jupyter-repo2docker jupyter-server-terminals jupyterlab-lsp jupyterlab-widgets
+
+# yuuno with some light patching for compatibility with newer python
+RUN sudo pacman -Syu --noconfirm --noprogressbar npm yarn && \
+    sudo npm install -g lerna@6 && \
+    venv/bin/python -m pip install git+https://github.com/xmoforf/yuuno.git
 
 ENTRYPOINT [ "venv/bin/jupyter", "lab", "--LabApp.token=''", "--allow-root", "--ip=0.0.0.0", "--port=8889"]
