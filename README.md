@@ -26,9 +26,7 @@ Tools included are:
 services:
   vs-jupyter:
     container_name: vs-jupyter
-    build:
-      context: ./vapoursynth/vapoursynth-jupyter
-      dockerfile: ./Dockerfile
+    image: ghcr.io/xmoforf/vs-jupyter:latest
     environment:
       - JUPYTER_TOKEN=""
     user: "1000:1000"
