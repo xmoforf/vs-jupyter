@@ -1,5 +1,7 @@
 # vs-jupyter
 
+[![vs-jupyter](https://github.com/xmoforf/vs-jupyter/actions/workflows/vs.yml/badge.svg)](https://github.com/xmoforf/vs-jupyter/actions/workflows/vs.yml)
+
 Simple docker containers for using [vapoursynth](https://www.vapoursynth.com/) and modern encoding tools.
 
 The containers gives you a collection of preselected vapoursynth plugins available at three levels of functionality:
@@ -35,9 +37,7 @@ services:
     restart: unless-stopped
 ```
 
-## description
-
-Tools included are:
+## included
 
 ### vs-shell
 
@@ -45,15 +45,47 @@ If you use this one, you would run the container and then execute a container sh
 
 - basic build environment
 - vapoursynth
+    - adaptivegrain
+    - addgrain
+    - bm3d
+    - combmask
+    - d2vsource
+    - dctfilter
+    - deblock
+    - descale
+    - dfttest
+    - dither
+    - edgefixer
+    - edi_rpow2
+    - eedi3m
+    - fft3dfilter
+    - fmtconv
+    - fvsfunc
+    - havsfunc
+    - kagefunc
+    - knlmeanscl
+    - lsmashsource
+    - lvsfunc
+    - mvtools 
+    - nnedi3
+    - qtgmc
+    - resize2
+    - sangnom
+    - retinex
+    - vsengine 
+    - vsjetpack 
+    - vspreview
+    - vsutil
+    - znedi3
 - ffmpeg
+- flac
+- matplotlib
 - mediainfo
 - mkvtoolnix
-- flac
+- numpy / scipy / pandas
 - opus
-- x264 / x265
 - python
-- matplotlib
-- scipy / numpy / pandas
+- x264 / x265
 - deew (requires DEE)
 
 ### vs-jupyter
