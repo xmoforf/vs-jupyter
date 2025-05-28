@@ -1,6 +1,6 @@
 # vs-jupyter
 
-[![vs-jupyter](https://github.com/xmoforf/vs-jupyter/actions/workflows/vs.yml/badge.svg)](https://github.com/xmoforf/vs-jupyter/actions/workflows/vs.yml)
+[![docker](https://github.com/xmoforf/vs-jupyter/actions/workflows/docker.yml/badge.svg)](https://github.com/xmoforf/vs-jupyter/actions/workflows/docker.yml)
 
 Simple docker containers for using [vapoursynth](https://www.vapoursynth.com/) and modern encoding tools.
 
