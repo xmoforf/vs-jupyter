@@ -1,6 +1,6 @@
-FROM archlinux:base
+FROM archlinux:base AS vs-shell
 
-# Fixing weird keyring fuckery
+# Initialize keyring
 RUN pacman-key --init
 RUN pacman -Sy --noconfirm --noprogressbar archlinux-keyring && pacman -Su --noconfirm --noprogressbar
 
@@ -24,6 +24,12 @@ RUN git clone https://aur.archlinux.org/yay.git && \
     cd .. && rm -rf yay && \
     sudo rm -rf /tmp/* /var/tmp/* /home/user/.cache/yay/* && sudo pacman -Scc --noconfirm
 
+
+
+###############################################################################
+# vapoursynth-shell
+###############################################################################
+
 # Installing vapoursynth and plugins
 RUN yay -Syu --noconfirm --noprogressbar \
     vapoursynth-git && \
@@ -36,7 +42,6 @@ RUN sudo pacman -Syu --noconfirm --noprogressbar \
     nano nvim vim \
     boost-libs \
     python-{pip,distutils-extra,uv} ruff \
-    python-ipykernel jupyterlab \
     ffmpeg \
     flac \
     go \
@@ -47,25 +52,8 @@ RUN sudo pacman -Syu --noconfirm --noprogressbar \
     rust \
     sox \
     x264 x265 \
-    qt6-multimedia \
-    docker && \
+    qt6-multimedia && \
     sudo pacman -Scc --noconfirm && sudo rm -rf /tmp/* /var/tmp/*
-
-RUN sudo usermod -aG docker user
-
-RUN yay -Syu --noconfirm --noprogressbar --removemake mkbrr && \
-    sudo rm -rf /tmp/* /var/tmp/* /home/user/.cache/yay/* && sudo pacman -Scc --noconfirm
-
-RUN git clone https://gitlab.com/passelecasque/propolis.git && \
-    cd propolis && \
-    make build && sudo install -D propolis /usr/local/bin/propolis && \
-    cd .. && sudo rm -rf propolis
-
-RUN git clone https://github.com/casey/intermodal.git && \
-    cd intermodal && \
-    sudo cargo install --path . && \
-    cd .. && sudo rm -rf intermodal
-
 
 RUN yay -Syu --noconfirm --noprogressbar --removemake \
     vapoursynth-plugin-addgrain-git \
@@ -137,12 +125,8 @@ RUN yay -G qtgmc && \
 
 WORKDIR /home/user
 
-# python packages
 RUN python -m venv venv && \
-    venv/bin/python -m pip install -U wheel setuptools pip ipykernel && \
-    venv/bin/python -m ipykernel install --user --name=vapoursynth --display-name="Vapoursynth"
-
-RUN venv/bin/python -m pip install \
+    venv/bin/python -m pip install \
     git+https://github.com/vapoursynth/vapoursynth.git \
     vsengine vsjetpack vspreview vsutil \
     av \
@@ -151,12 +135,77 @@ RUN venv/bin/python -m pip install \
     jinja2 \
     deew \
     guessit \
-    seaborn matplotlib plotly bokeh altair ggplot \
-    jupyterlab jupyter-repo2docker jupyter-server-terminals jupyterlab-lsp jupyterlab-widgets
+    seaborn matplotlib plotly bokeh altair ggplot
+
+ENTRYPOINT ["/bin/sh", "-c", "while true; do sleep 3600; done"]
+
+
+
+###############################################################################
+# vapoursynth-jupyter
+###############################################################################
+
+FROM vs-shell AS vs-jupyter
+
+RUN venv/bin/python -m pip install -U wheel setuptools pip && \
+    venv/bin/python -m pip install \
+    jupyter jupyterlab jupyter-repo2docker jupyter-server-terminals \
+    jupyterlab-lsp jupyterlab-widgets ipykernel && \
+    venv/bin/python -m ipykernel install --user --name=vapoursynth --display-name="Vapoursynth"
+
+ENTRYPOINT [ "venv/bin/jupyter", "lab", "--LabApp.token=''", "--allow-root", "--ip=0.0.0.0", "--port=8889"]
+
+
+
+###############################################################################
+# vapoursynth-yuuno
+###############################################################################
+
+FROM vs-jupyter AS vs-yuuno
+
+WORKDIR /tmp
+
+RUN sudo pacman -Syu --noconfirm --noprogressbar npm yarn && \
+    sudo npm install -g lerna@6
+
+WORKDIR /home/user
 
 # yuuno with some light patching for compatibility with newer python
-RUN sudo pacman -Syu --noconfirm --noprogressbar npm yarn && \
-    sudo npm install -g lerna@6 && \
-    venv/bin/python -m pip install git+https://github.com/xmoforf/yuuno.git
+RUN bash -c "source venv/bin/activate && python -m pip install git+https://github.com/xmoforf/yuuno.git"
+
+ENTRYPOINT [ "venv/bin/jupyter", "lab", "--LabApp.token=''", "--allow-root", "--ip=0.0.0.0", "--port=8889"]
+
+
+
+###############################################################################
+# vapoursynth-max
+###############################################################################
+
+FROM vs-yuuno AS vs-max
+
+WORKDIR /tmp
+
+RUN sudo pacman -Syu --noconfirm --noprogressbar \
+    docker && \
+    sudo pacman -Scc --noconfirm && sudo rm -rf /tmp/* /var/tmp/*
+
+RUN sudo usermod -aG docker user
+
+RUN yay -Syu --noconfirm --noprogressbar --removemake mkbrr && \
+    sudo rm -rf /tmp/* /var/tmp/* /home/user/.cache/yay/* && sudo pacman -Scc --noconfirm
+
+RUN git clone https://gitlab.com/passelecasque/propolis.git && \
+    cd propolis && \
+    make build && sudo install -D propolis /usr/local/bin/propolis && \
+    cd .. && sudo rm -rf propolis
+
+RUN git clone https://github.com/casey/intermodal.git && \
+    cd intermodal && \
+    sudo cargo install --path . && \
+    cd .. && sudo rm -rf intermodal
+
+
+
+WORKDIR /home/user
 
 ENTRYPOINT [ "venv/bin/jupyter", "lab", "--LabApp.token=''", "--allow-root", "--ip=0.0.0.0", "--port=8889"]
