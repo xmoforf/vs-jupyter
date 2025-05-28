@@ -19,12 +19,6 @@ docker run \
     --rm -it --entrypoint bash ghcr.io/xmoforf/vs-shell:latest
 ```
 
-Then activate the virtual environment.
-
-```bash
-source venv/bin/activate && cd projects
-```
-
 ## docker compose example
 
 ```yaml

@@ -11,6 +11,7 @@ RUN pacman -Syu --noconfirm --noprogressbar --needed base-devel git && \
     useradd -m --groups sudo user && \
     sed -i -e "s/Defaults    requiretty.*/ #Defaults    requiretty/g" /etc/sudoers && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers && \
+    echo 'source venv/bin/activate && cd projects' >> /home/user/.bashrc && \
     pacman -Scc --noconfirm && rm -rf /tmp/* /var/tmp/*
 
 USER user
