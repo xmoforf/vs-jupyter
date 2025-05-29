@@ -63,7 +63,7 @@ RUN yay -Syu --noconfirm --noprogressbar --removemake \
     vapoursynth-plugin-d2vsource-git \
     vapoursynth-plugin-dctfilter-git \
     vapoursynth-plugin-deblock-git \
-    vapoursynth-plugin-descale-git \
+    vapoursynth-plugin-descale-jet-git \
     vapoursynth-plugin-dfttest-git \
     vapoursynth-plugin-dither-git \
     vapoursynth-plugin-edgefixer-git \
@@ -124,6 +124,14 @@ RUN yay -G qtgmc && \
     cd .. && rm -rf qtgmc && \
     sudo rm -rf /tmp/* /var/tmp/* /home/user/.cache/yay/* && sudo pacman -Scc --noconfirm
 
+RUN sudo pacman -Syu python-hatchling --noconfirm --noprogressbar && \
+    yay -Syu --noconfirm --noprogressbar \
+    vapoursynth-plugin-awsmfunc-git \
+    vapoursynth-plugin-rekt-git \
+    vapoursynth-plugin-vsmuxtools \
+    vapoursynth-plugin-vodesfunc-git && \
+    sudo rm -rf /tmp/* /var/tmp/* /home/user/.cache/yay/* && sudo pacman -Scc --noconfirm
+    
 WORKDIR /home/user
 
 RUN python -m venv venv && \
