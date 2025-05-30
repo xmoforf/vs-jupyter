@@ -47,6 +47,7 @@ If you use this one, you would run the container and then execute a container sh
 - vapoursynth
     - adaptivegrain
     - addgrain
+    - awsmfunc
     - bm3d
     - combmask
     - d2vsource
@@ -69,11 +70,14 @@ If you use this one, you would run the container and then execute a container sh
     - mvtools 
     - nnedi3
     - qtgmc
+    - rekt
     - resize2
     - sangnom
     - retinex
+    - vodesfunc
     - vsengine 
-    - vsjetpack 
+    - vsjetpack
+    - vsmuxtools
     - vspreview
     - vsutil
     - znedi3
