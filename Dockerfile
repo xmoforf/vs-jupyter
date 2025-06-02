@@ -5,13 +5,14 @@ RUN pacman-key --init
 RUN pacman -Sy --noconfirm --noprogressbar archlinux-keyring && pacman -Su --noconfirm --noprogressbar
 
 # Add user, group sudo
-RUN pacman -Syu --noconfirm --noprogressbar --needed base-devel git && \
+RUN pacman -Syu --noconfirm --noprogressbar --needed base-devel git openssh && \
     echo $DOCKER_GID && \
     groupadd --system sudo && \
     useradd -m --groups sudo user && \
     sed -i -e "s/Defaults    requiretty.*/ #Defaults    requiretty/g" /etc/sudoers && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers && \
     echo 'source venv/bin/activate && cd projects' >> /home/user/.bashrc && \
+    systemctl enable sshd && \
     pacman -Scc --noconfirm && rm -rf /tmp/* /var/tmp/*
 
 USER user

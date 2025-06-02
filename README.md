@@ -33,6 +33,7 @@ services:
     user: "1000:1000"
     volumes:
       - <YOUR_PROJECT_DIR_HERE>:/home/user/projects
+      - <YOUR_SSH_DIR_HERE>:/home/user/.ssh
       - ./vapoursynth/config:/home/user/.jupyter
     restart: unless-stopped
 ```
