@@ -138,6 +138,7 @@ RUN python -m venv venv && \
     venv/bin/python -m pip install \
     git+https://github.com/vapoursynth/vapoursynth.git \
     vsengine vsjetpack vspreview vsutil \
+    git+https://github.com/xmoforf/vscompare.git \
     av \
     numpy scipy pandas matplotlib scikit-image \
     requests \
