@@ -85,7 +85,7 @@ RUN yay -Syu --noconfirm --noprogressbar --removemake \
     vapoursynth-plugin-vsutil-git && \
     sudo rm -rf /tmp/* /var/tmp/* /home/user/.cache/yay/* && sudo pacman -Scc --noconfirm
 
-COPY vapoursynth-plugin-adaptivegrain-git.patch .
+COPY patches/vapoursynth-plugin-adaptivegrain-git.patch .
 RUN yay -G vapoursynth-plugin-adaptivegrain-git && \
     cd vapoursynth-plugin-adaptivegrain-git && \
     patch -p1 < ../vapoursynth-plugin-adaptivegrain-git.patch && \
@@ -97,7 +97,7 @@ RUN yay -Syu --noconfirm --noprogressbar \
     vapoursynth-plugin-kagefunc-git && \
     sudo rm -rf /tmp/* /var/tmp/* /home/user/.cache/yay/* && sudo pacman -Scc --noconfirm
 
-COPY vapoursynth-plugin-znedi3-git.patch .
+COPY patches/vapoursynth-plugin-znedi3-git.patch .
 RUN yay -G vapoursynth-plugin-znedi3-git && \
     cd vapoursynth-plugin-znedi3-git && \
     makepkg -so --noconfirm && \
@@ -110,14 +110,14 @@ RUN yay -Syu --noconfirm --noprogressbar \
     vapoursynth-plugin-eedi3m-git && \
     sudo rm -rf /tmp/* /var/tmp/* /home/user/.cache/yay/* && sudo pacman -Scc --noconfirm
 
-COPY vapoursynth-plugin-resize2-git.patch .
+COPY patches/vapoursynth-plugin-resize2-git.patch .
 RUN yay -G vapoursynth-plugin-resize2-git && \
     cd vapoursynth-plugin-resize2-git && \
     makepkg -si --noconfirm && \
     cd .. && rm -rf vapoursynth-plugin-resize2-git && \
     sudo rm -rf /tmp/* /var/tmp/* /home/user/.cache/yay/* && sudo pacman -Scc --noconfirm
 
-COPY qtgmc.patch .
+COPY patches/qtgmc.patch .
 RUN yay -G qtgmc && \
     cd qtgmc && \
     patch -p1 < ../qtgmc.patch && \
