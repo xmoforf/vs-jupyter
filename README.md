@@ -46,52 +46,18 @@ If you use this one, you would run the container and then execute a container sh
 
 - basic build environment
 - vapoursynth
-    - adaptivegrain
-    - addgrain
-    - awsmfunc
-    - bm3d
-    - combmask
-    - d2vsource
-    - dctfilter
-    - deblock
-    - descale
-    - dfttest
-    - dither
-    - edgefixer
-    - edi_rpow2
-    - eedi3m
-    - fft3dfilter
-    - fmtconv
-    - fvsfunc
-    - havsfunc
-    - kagefunc
-    - knlmeanscl
-    - lsmashsource
-    - lvsfunc
-    - mvtools 
-    - nnedi3
-    - qtgmc
-    - rekt
-    - resize2
-    - sangnom
-    - retinex
-    - vodesfunc
-    - vsengine 
-    - vsjetpack
-    - vsmuxtools
-    - vspreview
-    - vsutil
-    - znedi3
-- ffmpeg
-- flac
-- matplotlib
-- mediainfo
-- mkvtoolnix
-- numpy / scipy / pandas
-- opus
+  - adaptivegrain, addgrain, adjust, awarpsharp2, awsmfunc, bilateral, bm3d, cas, combmask, ctmf, d2vsource, dctfilter, deblock, descale, dfttest, dither, edgefixer, edi_rpow2, eedi2, eedi3m, fft3dfilter, fillborders, fmtconv, fvsfunc, havsfunc, kagefunc, knlmeanscl, lsmashsource, lvsfunc, misc, muvsfunc, mvsfunc, mvtools, nnedi3, qtgmc, rekt, remapframes, removegrain, resize2, retinex, sangnom, stgfunc, subtext, tcanny, temporalmedian, vodesfunc, vsengine, vsjetpack, vsmuxtools, vspreview, vsutil, wwxd, yadifmod, znedi3
+- encoding tools
+  - deew (requires DEE)
+  - ffmpeg
+  - flac
+  - mediainfo
+  - mkvtoolnix
+  - opus
+  - x264 / x265
 - python
-- x264 / x265
-- deew (requires DEE)
+  - matplotlib
+  - numpy / scipy / pandas
 
 ### vs-jupyter
 
